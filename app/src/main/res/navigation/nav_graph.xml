@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/todoListFragment">
+
+    <fragment
+        android:id="@+id/todoListFragment"
+        android:name="com.serosoft.todoapp.ui.todo.TodoListFragment"
+        android:label="TodoListFragment" >
+        <action
+            android:id="@+id/todoToAdd"
+            app:destination="@id/addTodoFragment" />
+        <action
+            android:id="@+id/todoToDetail"
+            app:destination="@id/detailFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/addTodoFragment"
+        android:name="com.serosoft.todoapp.ui.add.AddTodoFragment"
+        android:label="fragment_add_todo"
+        tools:layout="@layout/fragment_add_todo" >
+        <action
+            android:id="@+id/addTodotoTodoList"
+            app:destination="@id/todoListFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailFragment"
+        android:name="com.serosoft.todoapp.ui.detail.DetailFragment"
+        android:label="fragment_detail"
+        tools:layout="@layout/fragment_detail" >
+        <action
+            android:id="@+id/detailtoTodoList"
+            app:destination="@id/todoListFragment" />
+        <argument
+            android:name="todo"
+            app:argType="com.serosoft.todoapp.data.entity.Todo" />
+    </fragment>
+</navigation>
