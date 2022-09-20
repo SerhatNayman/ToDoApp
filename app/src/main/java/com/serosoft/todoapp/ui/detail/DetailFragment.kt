@@ -29,6 +29,7 @@ class DetailFragment : Fragment() {
 
         binding.detailFragment = this
         binding.todoObject = navtodo.todo
+        binding.toolbarDetail="ToDo Detail"
 
 
         return binding.root

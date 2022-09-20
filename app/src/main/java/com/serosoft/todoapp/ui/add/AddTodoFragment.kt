@@ -24,6 +24,7 @@ class AddTodoFragment : Fragment() {
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_add_todo, container, false)
         binding.addTodoFragment = this
+        binding.toolbarAddTodo = "ToDo Add"
 
         return binding.root
     }

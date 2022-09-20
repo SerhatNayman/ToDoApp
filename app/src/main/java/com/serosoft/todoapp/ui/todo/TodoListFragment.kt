@@ -5,8 +5,10 @@ import android.view.*
 import androidx.fragment.app.Fragment
 import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.Navigation
 import com.serosoft.todoapp.R
 import com.serosoft.todoapp.data.entity.Todo
@@ -30,7 +32,7 @@ class TodoListFragment : Fragment(), SearchView.OnQueryTextListener {
             DataBindingUtil.inflate(inflater, R.layout.fragment_todo_list, container, false)
 
         binding.todoListFragment = this
-        binding.toolbar
+        binding.todoToolbar = "ToDo List"
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
 
         viewModel.todoList.observe(viewLifecycleOwner) {
@@ -40,8 +42,23 @@ class TodoListFragment : Fragment(), SearchView.OnQueryTextListener {
             noTodoControl(it)
 
         }
+
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.search_menu, menu)
+                val item = menu.findItem(R.id.search)
+                val searchView = item.actionView as SearchView
+                searchView.setOnQueryTextListener(this@TodoListFragment)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return false
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
         return binding.root
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,26 +66,6 @@ class TodoListFragment : Fragment(), SearchView.OnQueryTextListener {
         viewModel = tempViewModel
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.search_menu, menu)
-        super.onCreateOptionsMenu(menu, inflater)
-        val item = menu.findItem(R.id.search)
-        val searchView = item.actionView as SearchView
-        searchView.setOnQueryTextListener(this)
-
-    }
-
-
-    override fun onQueryTextSubmit(query: String): Boolean {
-        viewModel.searchTodo(query)
-        return true
-    }
-
-
-    override fun onQueryTextChange(newText: String): Boolean {
-        viewModel.searchTodo(newText)
-        return true
-    }
 
     override fun onResume() {
         super.onResume()
@@ -85,6 +82,18 @@ class TodoListFragment : Fragment(), SearchView.OnQueryTextListener {
         } else {
             binding.tvTodo.visibility = View.GONE
         }
+    }
+
+
+    override fun onQueryTextSubmit(query: String): Boolean {
+        viewModel.searchTodo(query)
+        return true
+    }
+
+
+    override fun onQueryTextChange(newText: String): Boolean {
+        viewModel.searchTodo(newText)
+        return true
     }
 
 
